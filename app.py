@@ -49,13 +49,20 @@ if st.button('Predict Probability'):
     elif(balls_left==0):
         st.header("Match has finished you can't predict now!!")
     else:
-        crr = Score / (balls_left/6)
-        rrr = (runs_left * 6) / balls_left
+        overs_completed = (120 - balls_left) / 6  # Calculate overs_completed from balls_left
+        crr = Score / overs_completed
+        rrr = runs_left / (balls_left / 6)
         wickets_remaining = 10 - wickets_down
-        input_df = pd.DataFrame({'batting_team': [batting_team], 'bowling_team': [bowling_team],
-                                 'city': [city], 'runs_left': [runs_left], 'balls_left': [balls_left],
+        input_df = pd.DataFrame({'batting_team': [batting_team], 
+                                 'bowling_team': [bowling_team],
+                                 'city': [city], 
+                                 'runs_left': [runs_left],
+                                 'balls_left': [balls_left],
                                  'wickets_remaining': [wickets_remaining],
-                                 'total_runs_x': [Target], 'crr': [crr], 'rrr': [rrr]})
+                                 'total_runs_x': [Target],
+                                 'crr': [crr], 
+                                 'rrr': [rrr]
+                                   })
         result = pipe.predict_proba(input_df)
         loss = result[0][0]
         win = result[0][1]
